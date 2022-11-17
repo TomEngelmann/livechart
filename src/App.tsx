@@ -186,8 +186,3 @@ function App() {
 }
 
 export default App;
-
-/**TODO
- * - Next round -> Clear states
- * - scores -> write function, update history
- */
