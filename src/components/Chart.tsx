@@ -37,11 +37,14 @@ interface ChartProps {
 }
 
 export default function Chart({ playerSet, totalRounds }: ChartProps) {
+  const [fullScreen, setFullScreen] = React.useState(false);
   let labels = [];
   for (let i = 0; i <= totalRounds; i++) {
     labels.push(i);
   }
   const options: ChartOptions<"line"> = {
+    maintainAspectRatio: true,
+
     responsive: true,
     plugins: {
       legend: {
@@ -71,5 +74,16 @@ export default function Chart({ playerSet, totalRounds }: ChartProps) {
       };
     }),
   };
-  return <Line options={options} data={data} className="w-full" />;
+  return (
+    <div
+      className={fullScreen ? "full w-full" : ""}
+      onClick={() => {
+        setFullScreen((prev) => !prev);
+      }}
+    >
+      <div className={fullScreen ? "content" : ""}>
+        <Line options={options} data={data} />
+      </div>
+    </div>
+  );
 }

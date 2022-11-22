@@ -25,7 +25,7 @@ interface PlayerPrediction {
 
 interface Players extends Array<Player> {}
 function App() {
-  const [gameMode, setGameMode] = React.useState("preGame");
+  const [gameMode, setGameMode] = React.useState("end");
   const [predictMode, setPredictMode] = React.useState(true);
   const [round, setRound] = React.useState(1);
   const [players, setPlayers] = React.useState<Players>([
@@ -43,6 +43,18 @@ function App() {
     },
     {
       name: "Player3",
+      points: 0,
+      history: [0],
+      color: "red",
+    },
+    {
+      name: "Player4",
+      points: 0,
+      history: [0],
+      color: "red",
+    },
+    {
+      name: "Player4",
       points: 0,
       history: [0],
       color: "red",
@@ -134,7 +146,7 @@ function App() {
             <div className="col-span-2"></div>
             <div className="col-span-8">
               {<Chart totalRounds={totalRounds} playerSet={players} />}
-              <div className="w-full grid grid-cols-2 gap-5">
+              <div className="w-full grid md:grid-cols-2 lg:grid-cols-3 gap-5 sm:grid-cols-1 maxH">
                 {players.map((item: Player) => {
                   return (
                     <PlayerCard
@@ -170,7 +182,7 @@ function App() {
                     nextRound();
                   }}
                 >
-                  Next round
+                  {round < totalRounds ? "Next round" : "Finish"}
                 </button>
               )}
             </div>

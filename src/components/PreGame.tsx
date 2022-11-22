@@ -11,7 +11,6 @@ interface PreGameProps {
   setGamePlayers: (input: Players) => void;
 }
 export default function PreGame({ setGamePlayers }: PreGameProps) {
-  const [names, setNames] = React.useState<string[]>([]);
   const [playerObject, setPlayerObject] = React.useState<Player>({
     name: "",
     points: 0,
@@ -88,7 +87,7 @@ export default function PreGame({ setGamePlayers }: PreGameProps) {
         <hr />
         <div className="w-full grid grid-cols-12">
           <div className="col-span-3"></div>
-          <div className="col-span-6 flex flex-col flex-start p-5 ">
+          <div className="col-span-6 flex flex-col flex-start p-5  maxH">
             {player.map((item) => {
               return (
                 <div
@@ -105,7 +104,8 @@ export default function PreGame({ setGamePlayers }: PreGameProps) {
       </div>
 
       <button
-        className="bg-blue-500 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded absolute bottom-0 right-0"
+        className="bg-blue-500 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded absolute bottom-0 right-0 disabled:opacity-50"
+        disabled={60 % player.length !== 0 || player.length < 3}
         onClick={() => {
           setGamePlayers(player);
         }}

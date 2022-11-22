@@ -1,3 +1,5 @@
+import Chart from "./Chart";
+
 export interface Player {
   name: string;
   points: number;
@@ -17,7 +19,10 @@ export default function FinishScreen({ players, newGame }: FinishProps) {
         <div className="w-screen h-screen">
           <h1 className="text-3xl text-center p-5">Rangliste</h1>
           <hr />
-          <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
+          <ol
+            className="pl-5 mt-2 space-y-1 list-decimal list-inside maxH"
+            style={{ maxHeight: "40vh" }}
+          >
             {Object.values(players).map((item) => (
               <li key={item.name} className="text-xl text-center p-5">
                 {item.name} {item.points}
@@ -25,7 +30,18 @@ export default function FinishScreen({ players, newGame }: FinishProps) {
             ))}
           </ol>
           <hr />
-
+          <div className="w-full grid grid-cols-12">
+            <div className="col-span-3  w-50"></div>
+            <div className="col-span-6 flex flex-col flex-start p-5  maxH">
+              {
+                <Chart
+                  totalRounds={players[0].history.length - 1}
+                  playerSet={players}
+                />
+              }
+            </div>
+            <div className="col-span-3"></div>
+          </div>
           <div className="absolute bottom-0 right-0">
             {/*
                 <button
