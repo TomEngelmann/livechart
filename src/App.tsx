@@ -24,55 +24,60 @@ interface PlayerPrediction {
 }
 
 interface Players extends Array<Player> {}
-function App() {
-  const [gameMode, setGameMode] = React.useState("end");
-  const [predictMode, setPredictMode] = React.useState(true);
-  const [round, setRound] = React.useState(1);
-  const [players, setPlayers] = React.useState<Players>([
-    {
-      name: "Player1",
-      points: 0,
-      history: [0],
-      color: "green",
-    },
-    {
-      name: "Player2",
-      points: 0,
-      history: [0],
-      color: "blue",
-    },
-    {
-      name: "Player3",
-      points: 0,
-      history: [0],
-      color: "red",
-    },
-    {
-      name: "Player4",
-      points: 0,
-      history: [0],
-      color: "red",
-    },
-    {
-      name: "Player4",
-      points: 0,
-      history: [0],
-      color: "red",
-    },
-    {
-      name: "Player4",
-      points: 0,
-      history: [0],
-      color: "red",
-    },
-  ]);
 
-  const [predictions, setPredictions] = React.useState<Prediction>({}); //Prediction Object
+function getLS(key: string, defVal: any) {
+  let value = localStorage.getItem(key);
+
+  if (typeof value === "string" && key !== "gameMode") {
+    value = JSON.parse(value); // ok
+  }
+  return value || defVal;
+}
+function App() {
+  const [gameMode, setGameMode] = React.useState(getLS("gameMode", "preGame"));
+  const [predictMode, setPredictMode] = React.useState(
+    getLS("predictMode", true)
+  );
+
+  const [round, setRound] = React.useState(getLS("round", 1));
+  const [players, setPlayers] = React.useState<Players>(
+    getLS("players", [
+      {
+        name: "Player1",
+        points: 0,
+        history: [0],
+        color: "green",
+      },
+      {
+        name: "Player2",
+        points: 0,
+        history: [0],
+        color: "blue",
+      },
+      {
+        name: "Player3",
+        points: 0,
+        history: [0],
+        color: "red",
+      },
+      {
+        name: "Player4",
+        points: 0,
+        history: [0],
+        color: "red",
+      },
+    ])
+  );
+
+  const [predictions, setPredictions] = React.useState<Prediction>(
+    getLS("predictions", {})
+  ); //Prediction Object
 
   const [totalRounds, setTotalRounds] = React.useState(60 / players.length); //Total Rounds
 
   function nextRound() {
     setRound(round + 1);
+    localStorage.setItem("round", round + 1);
     calculateScores();
     let currentRound = round;
     if (currentRound + 1 > totalRounds) {
@@ -80,18 +85,25 @@ function App() {
         a.points > b.points ? -1 : 1
       );
       setPlayers(sortedPlayers);
+      localStorage.setItem("players", JSON.stringify(sortedPlayers));
       setGameMode("end");
+      localStorage.setItem("gameMode", "end");
       return;
     }
     setPredictMode(true);
+    localStorage.setItem("predictMode", JSON.stringify(true));
   }
 
   function setPlayerNames(input: Players) {
     setPlayers(input);
+    localStorage.setItem("players", JSON.stringify(input));
     setGameMode("game");
+    localStorage.setItem("gameMode", "game");
     setTotalRounds(60 / input.length);
     setRound(1);
+    localStorage.setItem("round", JSON.stringify(1));
     setPredictions({});
+    localStorage.setItem("predictions", JSON.stringify({}));
   }
   function calculateScores() {
     const playerPredictions = predictions;
@@ -113,18 +125,23 @@ function App() {
       scores[index].history.push(scores[index].points);
     });
     setPlayers(scores);
+    localStorage.setItem("players", JSON.stringify(scores));
   }
   function nextPredict() {
     setPredictMode(false);
+    localStorage.setItem("predictMode", JSON.stringify(false));
   }
 
   function newGame(input: string) {
     if (input === "new") {
       setPlayers([]);
+      localStorage.setItem("players", JSON.stringify([]));
       setPredictMode(true);
+      localStorage.setItem("predictMode", JSON.stringify(true));
       setRound(1);
+      localStorage.setItem("round", JSON.stringify(1));
       setGameMode("preGame");
-    } else if (input === "same") {
+      localStorage.setItem("gameMode", "preGame");
     }
   }
 
@@ -135,7 +152,9 @@ function App() {
       prediction,
       errors,
     };
+    console.log("TEST");
     setPredictions(obj);
+    localStorage.setItem("predictions", JSON.stringify(obj));
   }
   return (
     <div className="App">

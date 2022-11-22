@@ -91,6 +91,7 @@ export default function PreGame({ setGamePlayers }: PreGameProps) {
             {player.map((item) => {
               return (
                 <div
+                  key={item.name}
                   className="p-2 my-3 text-center rounded-md"
                   style={{ border: `3px solid ${item.color}` }}
                 >
