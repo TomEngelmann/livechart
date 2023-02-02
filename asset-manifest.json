@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/livechart/static/css/main.3cac1413.css",
+    "main.js": "/livechart/static/js/main.a58116f1.js",
+    "static/js/787.6bd9c648.chunk.js": "/livechart/static/js/787.6bd9c648.chunk.js",
+    "index.html": "/livechart/index.html",
+    "main.3cac1413.css.map": "/livechart/static/css/main.3cac1413.css.map",
+    "main.a58116f1.js.map": "/livechart/static/js/main.a58116f1.js.map",
+    "787.6bd9c648.chunk.js.map": "/livechart/static/js/787.6bd9c648.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3cac1413.css",
+    "static/js/main.a58116f1.js"
+  ]
+}
