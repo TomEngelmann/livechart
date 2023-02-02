@@ -1,4 +1,5 @@
 import React from "react";
+import { usePlayerStore } from "../states";
 
 export interface Predictions {
   name: string;
@@ -9,34 +10,32 @@ interface PlayerProps {
   name: string;
   predictionMode: boolean;
   round: number;
-  setPredictions: (input: Predictions) => void;
+  color: string;
 }
 export default function PlayerCard({
   name,
   predictionMode,
   round,
-  setPredictions,
+  color,
 }: PlayerProps) {
+  const { changeErrors, changePrediction } = usePlayerStore();
   const [prediction, setPrediction] = React.useState<number>(0);
   const [errors, setErrors] = React.useState(0);
   React.useEffect(() => {
-    if (prediction < 0) {
-      setPrediction(0);
-      const obj: Predictions = {
-        name: name,
-        prediction: 0,
-        errors: errors,
-      };
-      setPredictions(obj);
-    } else setPredictions({ name, prediction, errors });
-  }, [prediction, errors]);
-
+    changeErrors(name, errors);
+  }, [errors]);
+  React.useEffect(() => {
+    changePrediction(name, prediction);
+  }, [prediction]);
   React.useEffect(() => {
     setPrediction(0);
     setErrors(0);
   }, [round]);
   return (
-    <div className="p-5 shadow-md w-full">
+    <div
+      className="p-5 shadow-md w-full border-solid "
+      style={{ border: `3px solid ${color}` }}
+    >
       <div className="flex flex-row justify-between">
         <p className="">{name}</p>
         <p>Prediction: {prediction}</p>

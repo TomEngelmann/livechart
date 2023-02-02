@@ -1,3 +1,4 @@
+import { useGameModeStore, usePlayerStore } from "../states";
 import Chart from "./Chart";
 
 export interface Player {
@@ -8,11 +9,14 @@ export interface Player {
 }
 interface Players extends Array<Player> {}
 
-interface FinishProps {
-  players: Players;
-  newGame: (s: string) => void;
-}
-export default function FinishScreen({ players, newGame }: FinishProps) {
+export default function FinishScreen() {
+  const { players, restartGame } = usePlayerStore();
+  const sortedPlayers = players.sort((a, b) => (a.points > b.points ? -1 : 1));
+  const { setGameMode } = useGameModeStore();
+  function newGame() {
+    restartGame();
+    setGameMode("preGame");
+  }
   return (
     <>
       {players && (
@@ -23,7 +27,7 @@ export default function FinishScreen({ players, newGame }: FinishProps) {
             className="pl-5 mt-2 space-y-1 list-decimal list-inside maxH"
             style={{ maxHeight: "40vh" }}
           >
-            {Object.values(players).map((item) => (
+            {Object.values(sortedPlayers).map((item) => (
               <li key={item.name} className="text-xl text-center p-5">
                 {item.name} {item.points}
               </li>
@@ -33,30 +37,15 @@ export default function FinishScreen({ players, newGame }: FinishProps) {
           <div className="w-full grid grid-cols-12">
             <div className="col-span-3  w-50"></div>
             <div className="col-span-6 flex flex-col flex-start p-5  maxH">
-              {
-                <Chart
-                  totalRounds={players[0].history.length - 1}
-                  playerSet={players}
-                />
-              }
+              {<Chart />}
             </div>
             <div className="col-span-3"></div>
           </div>
           <div className="absolute bottom-0 right-0">
-            {/*
-                <button
-                className="bg-blue-500 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded m-2"
-                onClick={() => {
-                    newGame("same");
-                }}
-                >
-                New Game same Player
-                </button>
-            */}
             <button
               className="bg-blue-500 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded m-2"
               onClick={() => {
-                newGame("new");
+                newGame();
               }}
             >
               Neues Spiel

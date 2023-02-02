@@ -18,8 +18,10 @@ code {
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   left: 0;
+  margin-right: 56px;
+  margin-left: 24px;
   top: 0;
-  width: 100%; /* Full width */
+  width: 90%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0, 0, 0); /* Fallback color */
@@ -36,4 +38,11 @@ code {
 .maxH {
   max-height: 55vh;
   overflow-y: auto;
+}
+
+@media (min-width: 1200px) {
+  /* For mobile phones: */
+  [class*="maxH"] {
+    max-height: 13vh;
+  }
 }

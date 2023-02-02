@@ -13,6 +13,7 @@ import {
   ChartOptions,
   ChartData,
 } from "chart.js";
+import { useGameModeStore, usePlayerStore } from "../states";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -23,20 +24,10 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-export interface Player {
-  name: string;
-  points: number;
-  history: number[];
-  color: string;
-}
-interface Players extends Array<Player> {}
 
-interface ChartProps {
-  totalRounds: number;
-  playerSet: Players;
-}
-
-export default function Chart({ playerSet, totalRounds }: ChartProps) {
+export default function Chart() {
+  const { players } = usePlayerStore();
+  const totalRounds = 60 / players.length;
   const [fullScreen, setFullScreen] = React.useState(false);
   let labels = [];
   for (let i = 0; i <= totalRounds; i++) {
@@ -48,8 +39,11 @@ export default function Chart({ playerSet, totalRounds }: ChartProps) {
     responsive: true,
     plugins: {
       legend: {
-        position: "top" as const,
+        position: "left" as const,
         display: false,
+        labels: {
+          usePointStyle: true,
+        },
       },
     },
     scales: {
@@ -65,7 +59,7 @@ export default function Chart({ playerSet, totalRounds }: ChartProps) {
 
   const data = {
     labels: labels,
-    datasets: playerSet.map((item: Player) => {
+    datasets: players.map((item) => {
       return {
         label: item.name,
         borderColor: item.color,
