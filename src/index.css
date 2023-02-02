@@ -39,3 +39,10 @@ code {
   max-height: 55vh;
   overflow-y: auto;
 }
+
+@media (min-width: 1200px) {
+  /* For mobile phones: */
+  [class*="maxH"] {
+    max-height: 13vh;
+  }
+}

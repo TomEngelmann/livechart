@@ -4,6 +4,9 @@ import { useGameModeStore, usePlayerStore } from "../states";
 import React from "react";
 export default function Game() {
   const { players, calculateScore } = usePlayerStore();
+  const predictedAmount = players
+    .map((item: any) => item.prediction)
+    .reduce((prev: number, next: number) => prev + next);
   const { setGameMode } = useGameModeStore();
   const [totalRounds, setTotalRounds] = React.useState(60 / players.length);
   const [round, setRound] = React.useState(1);
@@ -43,27 +46,16 @@ export default function Game() {
         <div className="col-span-2 text-right p-5">Runde {round} </div>
       </div>
 
-      <div className="p-5 absolute bottom-0 w-full">
+      <div className="p-5 absolute bottom-0 w-full bg-white">
         <hr className="" />
-        <div className="py-3 flex flex-row justify-between bg-white">
+        <div className="py-3 flex flex-row justify-between items-center  bottom-0">
           <button
             className={` text-white font-bold py-2 px-4 rounded ${
               predictMode ? "bg-blue-500 hover:bg-blue-500" : "invisible"
             }
-            ${
-              players
-                .map((item: any) => item.prediction)
-                .reduce((prev: number, next: number) => prev + next) === round
-                ? "bg-blue-200 hover:bg-blue-100"
-                : ""
-            }
+            ${predictedAmount === round ? "bg-blue-200 hover:bg-blue-100" : ""}
             `}
-            disabled={
-              !predictMode ||
-              players
-                .map((item: any) => item.prediction)
-                .reduce((prev: number, next: number) => prev + next) === round
-            }
+            disabled={!predictMode || predictedAmount === round}
             onClick={() => {
               setPredictMode(false);
             }}
@@ -72,9 +64,7 @@ export default function Game() {
           </button>
           <div className={`${predictMode ? "" : "invisible"}`}>
             Predicted:
-            {players
-              .map((item: any) => item.prediction)
-              .reduce((prev: number, next: number) => prev + next)}
+            {predictedAmount}
           </div>
           <button
             className={`text-white font-bold py-2 px-4 rounded  ${
